@@ -6,7 +6,7 @@ dotenv.config({ path: "./config.env" });
 
 const cors = require("cors");
 const http = require("http").Server(app);
-const User = require("./User");
+const User = require("./user");
 
 const PORT = process.env.PORT || 4000;
 const socketIO = require("socket.io")(http, {
