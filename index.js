@@ -40,7 +40,7 @@ function start_sending_data() {
     process.stdout.write(".");
     if (user_data.length === 0) {
       stop_sending_data();
-      console.log("stoped_sending_data");
+      console.log(")"); //stoped_sending_data
     } else {
       socketIO.emit("users_coords_list", user_data);
       user_data = [];
@@ -62,14 +62,15 @@ function collect_users_data(new_coord) {
   user_data.push(new_coord);
 
   if (intervalId == null) {
-    console.log("\nstart_sending_data");
+    // console.log("\n("); //start_sending_data
+    process.stdout.write("\n(");
     start_sending_data();
   }
 }
 
 socketIO.on("connection", socket => {
-  console.log(`⚡: ${socket.id} user just connected!`);
-  // socket.join(socket.id);
+  // console.log(`⚡: ${socket.id} user just connected!`);
+  console.log("++", socketIO.engine.clientsCount);
 
   socket.on("user_coords", data => {
     // console.log("data:", data);
@@ -83,11 +84,14 @@ socketIO.on("connection", socket => {
 
   socket.on("checkDriverPass", data => {
     // console.log(data.socketID, data.password);
-    socketIO.to(data.socketID).emit("isDriverPassTrue", data.password==driverPassword);
-  })
+    socketIO
+      .to(data.socketID)
+      .emit("isDriverPassTrue", data.password == driverPassword);
+  });
 
   socket.on("disconnect", () => {
-    console.log("   🔥: A user disconnected");
+    // console.log("   🔥: A user disconnected");
+    console.log("--", socketIO.engine.clientsCount);
     // socketIO.emit("newUserResponse", "this is new user responce")
     socket.disconnect();
   });
